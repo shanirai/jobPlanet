@@ -1,27 +1,42 @@
 // React, Next js packages
 import React, { useState, useEffect } from "react";
 // Third party packages
-import { slice } from "lodash";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import InfiniteScroll from "react-infinite-scroll-component";
 // Custom packages
 import Layout from "@/features/common/Layout";
 import JobsCard from "@/features/jobs/JobsCard";
+import CardSkeleton from "@/features/common/CardSkeleton";
 
 export default function Home() {
-  const [jobsData, setJobsData] = useState([]);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [index, setIndex] = useState(5);
-  // const initialPosts = slice(post, 0, index);
+  const [jobsData, setJobsData] = useState<any[]>([]);
+  const [loader, setLoader] = useState(false);
+
   //** api integration */
-  const getData = () => {
-    fetch(`https://cea13314-94c5-4b7f-b96f-546f2fb397c9.mock.pstmn.io/jptest`)
-      .then((res) => res.json())
-      .then((json) => setJobsData(json))
-      .catch((e) => console.log(e));
+  const getData = async () => {
+    setLoader(true);
+    const pageNumber = Math.ceil(jobsData.length / 9) + 1;
+    const res = await fetch(
+      `https://cea13314-94c5-4b7f-b96f-546f2fb397c9.mock.pstmn.io/jptest?page=${pageNumber}`
+    );
+    const resData = await res.json();
+    const apiRes = resData?.data?.recruits;
+    const mergeData = [...jobsData, ...apiRes];
+    // console.log(data)
+    setJobsData(mergeData);
+    setLoader(false);
   };
+
   useEffect(() => {
     getData();
   }, []);
-  console.log(jobsData, "check post data");
+
+  console.log(jobsData);
+
+  const fetchMoreData = () => {
+    getData();
+  };
 
   return (
     <div>
@@ -29,7 +44,14 @@ export default function Home() {
         {/* main section */}
         <div className=" container  desktop:container desktop:mx-auto laptop:container laptop:mx-auto tablet:container tablet:mx-auto my-10 mx-auto">
           {/* list of jobs */}
-          <JobsCard jobsData={jobsData} fetchData={getData} />
+          <InfiniteScroll
+            dataLength={jobsData.length}
+            next={fetchMoreData}
+            hasMore={jobsData.length < 36} // removed has===true condition for set up infinite scroll limit
+            loader={loader === true ? <CardSkeleton /> : null}
+          >
+            <JobsCard jobsData={jobsData} fetchData={getData} />
+          </InfiniteScroll>
         </div>
       </Layout>
     </div>

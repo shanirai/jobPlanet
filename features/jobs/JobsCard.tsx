@@ -11,13 +11,13 @@ function JobsCard(props: any) {
   return (
     <div>
       <div className="grid desktop:grid-cols-3 gap-6 mx-4 sm:mx-0 desktop:mx-0 laptop:mx-0">
-        {jobsData?.data?.recruits.map((data: any, index: number) => (
+        {jobsData.map((data: any, index: number) => (
           <div
             className="rounded-xl border-[1px] border-solid border-[#E5E6E9] relative  overflow-hidden shadow-[0_1px 4px rgba(30, 40, 58, 0.04)]"
             key={index}
           >
             <img
-              className="w-full"
+              className="object-cover"
               src={data.image === null ? "/images/jobs.jpg" : data.image}
               alt="recruits_image"
             />
@@ -31,17 +31,21 @@ function JobsCard(props: any) {
             </div>
             <div className="px-5 pt-[10px] flex flex-col divide-y">
               <div className="pb-3">
-                <h4 className="font-bold text-xl text-gray1 ">{data.title}</h4>
+                <h4 className="font-bold text-xl text-gray1 ">
+                  {data.title.length > 17
+                    ? data.title.slice(0, 17) + "..."
+                    : data.title}
+                </h4>
                 <p className="text-gray2 text-xs">{data.appeal}</p>
               </div>
 
               <div className="flex flex-col py-3">
-                <div className="flex flex-row ">
+                <div className="flex flex-row justify-between ">
                   {/* company name */}
                   <div className="flex flex-row items-center">
                     <img
                       src={data.company.logo}
-                      className="h-6 w-6 border-[1px] border-solid border-[#E5E6E9] rounded"
+                      className="h-6 w-6 object-cover border-[1px] border-solid border-[#E5E6E9] rounded"
                       alt="company_logo"
                     />
                     <div className="text-base font-bold text-gray1 ml-2">
@@ -70,7 +74,9 @@ function JobsCard(props: any) {
                   </div>
                 </div>
                 <h4 className="text-sm font-bold text-gray2 pt-2">
-                  {data.review}
+                  {data.review.length > 26
+                    ? data.review.slice(0, 25) + "..."
+                    : data.review}
                 </h4>
               </div>
               <div className="flex flex-row items-center py-3">
