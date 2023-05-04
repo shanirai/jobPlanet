@@ -7,7 +7,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 // Custom packages
 import Layout from "@/features/common/Layout";
 import JobsCard from "@/features/jobs/JobsCard";
-import CardSkeleton from "@/features/common/CardSkeleton";
 
 export default function Home() {
   const [jobsData, setJobsData] = useState<any[]>([]);
@@ -44,11 +43,14 @@ export default function Home() {
         {/* main section */}
         <div className=" container  desktop:container desktop:mx-auto laptop:container laptop:mx-auto tablet:container tablet:mx-auto my-10 mx-auto">
           {/* list of jobs */}
+
           <InfiniteScroll
             dataLength={jobsData.length}
             next={fetchMoreData}
             hasMore={jobsData.length < 36} // removed has===true condition for set up infinite scroll limit
-            loader={loader === true ? <CardSkeleton /> : null}
+            loader={loader === true ? <h4>loading ...</h4> : null}
+            scrollThreshold="100%"
+            className="overflow-y-hidden"
           >
             <JobsCard jobsData={jobsData} fetchData={getData} />
           </InfiniteScroll>

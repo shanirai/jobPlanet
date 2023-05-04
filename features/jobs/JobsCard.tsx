@@ -10,10 +10,10 @@ function JobsCard(props: any) {
   const { jobsData } = props;
   return (
     <div>
-      <div className="grid desktop:grid-cols-3 gap-6 mx-4 sm:mx-0 desktop:mx-0 laptop:mx-0">
+      <div className="grid desktop:grid-cols-3 gap-6 mx-4 sm:mx-0 desktop:mx-0 laptop:mx-0 cursor-pointer   ">
         {jobsData.map((data: any, index: number) => (
           <div
-            className="rounded-xl border-[1px] border-solid border-[#E5E6E9] relative  overflow-hidden shadow-[0_1px 4px rgba(30, 40, 58, 0.04)]"
+            className="rounded-xl border-[1px] border-solid border-[#E5E6E9] relative hover:scale-95 transition duration-100 ease-out hover:ease-out  overflow-hidden shadow-[0_1px 4px rgba(30, 40, 58, 0.04)]"
             key={index}
           >
             <img
